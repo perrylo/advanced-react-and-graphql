@@ -7,7 +7,7 @@ import DisplayError from './ErrorMessage'
 import PaginationStyles from './styles/PaginationStyles'
 import { perPage } from '../config.js'
 
-const PAGINATION_QUERY = gql`
+export const PAGINATION_QUERY = gql`
   query PAGINATION_QUERY {
     _allProductsMeta {
       count

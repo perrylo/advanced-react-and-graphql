@@ -1,0 +1,12 @@
+FE:
+- React, Next.js, Apollo (GraphQL API - talks to Keystone), Styled Components (styled-components.com: reusable scoped CSS components)
+
+BE:
+- Keystone.js (Headless CMS - gives us a GraphQL api, written in Node), Node, MongoDB
+
+Next:
+- Use <Link> to link internally and <a> to link externally
+
+Keystone Login - BE localhost:3000
+u: p3rrylo@gmail.com
+p: 4zejCjg@vWmcIQ@x%y6

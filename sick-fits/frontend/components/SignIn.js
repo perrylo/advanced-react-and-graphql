@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/client'
+import Router from 'next/router'
 import Form from './styles/Form'
 import useForm from '../lib/useForm'
 import { CURRENT_USER_QUERY } from './User'
@@ -43,11 +44,14 @@ export default function SignIn() {
   async function handleSubmit(e) {
     e.preventDefault() // stop form from submitting
 
-    const r = await signin()
-
+    // Send the email and password to the graplhqlAPI
+    await signin()
     resetForm()
 
-    // Send the email and password to the graplhqlAPI
+    // Go to that product list page
+    Router.push({
+      pathname: `/products`,
+    })
   }
 
   return (
@@ -68,7 +72,7 @@ export default function SignIn() {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="email">
+        <label htmlFor="password">
           Password
           <input
             type="password"

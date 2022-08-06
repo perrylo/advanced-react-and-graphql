@@ -4,24 +4,21 @@ import Form from './styles/Form'
 import useForm from '../lib/useForm'
 import DisplayError from './ErrorMessage'
 
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-    createUser(data: { email: $email, name: $name, password: $password }) {
-      id
-      email
-      name
+const REQUEST_RESET_MUTATION = gql`
+  mutation REQUEST_RESET_MUTATION($email: String!) {
+    sendUserPasswordResetLink(email: $email) {
+      code
+      message
     }
   }
 `
 
-export default function SignUp() {
+export default function RequestReset() {
   const { inputs, handleChange, resetForm } = useForm({
     email: '',
-    password: '',
-    name: '',
   })
 
-  const [signup, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
+  const [signup, { data, loading, error }] = useMutation(REQUEST_RESET_MUTATION, {
     variables: inputs,
   })
 
@@ -45,22 +42,13 @@ export default function SignUp() {
 
   return (
     <Form method="post" onSubmit={handleSubmit}>
-      <h2>Sign up for an account</h2>
+      <h2>Request password reset</h2>
 
       <DisplayError error={error} />
 
       <fieldset>
-        <label htmlFor="name">
-          Your Name
-          <input
-            type="name"
-            name="name"
-            placeholder="Your Name"
-            autoComplete="name"
-            value={inputs.name}
-            onChange={handleChange}
-          />
-        </label>
+        {data?.sendUserPasswordResetLink === null && <p>Success! Check your email for a link!</p>}
+
         <label htmlFor="email">
           Email
           <input
@@ -72,18 +60,7 @@ export default function SignUp() {
             onChange={handleChange}
           />
         </label>
-        <label htmlFor="password">
-          Password
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            autoComplete="password"
-            value={inputs.password}
-            onChange={handleChange}
-          />
-        </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit">Request Reset</button>
       </fieldset>
     </Form>
   )

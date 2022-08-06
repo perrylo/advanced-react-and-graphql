@@ -1,39 +1,35 @@
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/client'
 import Form from './styles/Form'
 import useForm from '../lib/useForm'
 import DisplayError from './ErrorMessage'
 
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-    createUser(data: { email: $email, name: $name, password: $password }) {
-      id
-      email
-      name
+const RESET_MUTATION = gql`
+  mutation RESET_MUTATION($email: String!, $token: String!, $password: String!) {
+    redeemUserPasswordResetToken(email: $email, token: $token, password: $password) {
+      code
+      message
     }
   }
 `
 
-export default function SignUp() {
+export default function Reset({ token }) {
   const { inputs, handleChange, resetForm } = useForm({
     email: '',
     password: '',
-    name: '',
+    token,
   })
 
-  const [signup, { data, loading, error }] = useMutation(SIGNUP_MUTATION, {
+  const [reset, { data, error }] = useMutation(RESET_MUTATION, {
     variables: inputs,
   })
-
-  /* const error =
-    data?.authenticateUserWithPassword.__typename === 'UserAuthenticationWithPasswordFailure'
-      ? data?.authenticateUserWithPassword
-      : undefined */
+  const successfulError = data?.redeemUserPasswordResetToken?.code ? data?.redeemUserPasswordResetToken : undefined
 
   async function handleSubmit(e) {
     e.preventDefault() // stop form from submitting
 
-    await signup().catch(console.error)
+    await reset().catch(console.error)
     resetForm()
 
     // Send the email and password to the graplhqlAPI
@@ -45,22 +41,13 @@ export default function SignUp() {
 
   return (
     <Form method="post" onSubmit={handleSubmit}>
-      <h2>Sign up for an account</h2>
+      <h2>Reset your password</h2>
 
-      <DisplayError error={error} />
+      <DisplayError error={error || successfulError} />
 
       <fieldset>
-        <label htmlFor="name">
-          Your Name
-          <input
-            type="name"
-            name="name"
-            placeholder="Your Name"
-            autoComplete="name"
-            value={inputs.name}
-            onChange={handleChange}
-          />
-        </label>
+        {data?.redeemUserPasswordResetToken === null && <p>Success! You can now sign in!</p>}
+
         <label htmlFor="email">
           Email
           <input
@@ -83,8 +70,12 @@ export default function SignUp() {
             onChange={handleChange}
           />
         </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit">Request Reset</button>
       </fieldset>
     </Form>
   )
+}
+
+Reset.propTypes = {
+  token: PropTypes.string.isRequired,
 }

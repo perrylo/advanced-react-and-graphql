@@ -6,6 +6,7 @@ import { Product } from './schemas/Product'
 import { ProductImage } from './schemas/ProductImage'
 import 'dotenv/config' // load local .env file
 import { insertSeedData } from './seed-data'
+import { sendPasswordResetEmail } from './lib/mail'
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost/keystone-sick-fits-tutorial'
 
@@ -21,6 +22,13 @@ const { withAuth } = createAuth({
   initFirstItem: {
     fields: ['name', 'email', 'password'],
     // todo: add in initial roles here
+  },
+  // Simply adding this to our createAuth config adds the password reset flow to keystone!
+  passwordResetLink: {
+    async sendToken(args) {
+      // send the email
+      await sendPasswordResetEmail(args.token, args.identity)
+    },
   },
 })
 

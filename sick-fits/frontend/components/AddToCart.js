@@ -1,3 +1,4 @@
+import { PropTypes } from 'prop-types'
 import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
 import { useCart } from '../lib/cartState'
@@ -25,4 +26,8 @@ export default function AddToCart({ id }) {
       Add{loading && 'ing'} to Cart!
     </button>
   )
+}
+
+AddToCart.propTypes = {
+  id: PropTypes.string.isRequired,
 }

@@ -52,7 +52,6 @@ export default function UpdateProduct({ id }) {
       price: '',
     }
   );
-  console.log(inputs);
   if (loading) return <p>loading...</p>;
   // 3. We need the form to handle the updates
   return (
@@ -67,7 +66,6 @@ export default function UpdateProduct({ id }) {
             price: inputs.price,
           },
         }).catch(console.error);
-        console.log(res);
         // Submit the inputfields to the backend:
         // TODO: Handle Submit!!!
         // const res = await createProduct();

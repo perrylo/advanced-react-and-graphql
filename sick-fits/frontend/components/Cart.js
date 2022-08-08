@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import calcTotalPrice from '../lib/calcTotalPrice'
+import { useCart } from '../lib/cartState'
 import formatMoney from '../lib/formatMoney'
 import CartStyles from './styles/CartStyles'
 import Supreme from './styles/Supreme'
 import { useUser } from './User'
+import CloseButton from './styles/CloseButton'
 
 const CartItemStyles = styled.li`
   padding: 1rem 0;
@@ -42,15 +44,17 @@ function CartItem({ cartItem }) {
 
 export default function Cart() {
   const me = useUser()
+  const { cartOpen, closeCart } = useCart()
 
   if (!me) return null // don't render cart if there is no logged in user
 
-  // console.log(me)
-
   return (
-    <CartStyles open>
+    <CartStyles open={cartOpen}>
       <header>
         <Supreme>{me.name}'s Cart</Supreme>
+        <CloseButton type="button" onClick={closeCart}>
+          &times;
+        </CloseButton>
       </header>
       <ul>
         {me.cart.map((cartItem) => (

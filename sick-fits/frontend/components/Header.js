@@ -2,6 +2,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import Cart from './Cart'
 import Nav from './Nav'
+import Search from './Search'
 
 // Tagged Template Literal to implement CSS in JS
 // Styled component - locally(scope) styled tags
@@ -46,7 +47,7 @@ export default function Header() {
         <Nav />
       </div>
       <div className="sub-bar">
-        <p>search</p>
+        <Search />
       </div>
       <Cart />
     </HeaderStyles>
